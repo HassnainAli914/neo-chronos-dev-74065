@@ -4,38 +4,65 @@ import { Layers, Smartphone, Globe } from "lucide-react";
 
 const LaserBeamTransition = () => {
   const [beamProgress, setBeamProgress] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const [isReversing, setIsReversing] = useState(false);
 
   useEffect(() => {
-    if (hasAnimated) return;
+    const forwardDuration = 2500;
+    const pauseDuration = 1000;
+    const reverseDuration = 2500;
+    let animationFrameId: number | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     
-    const startTime = Date.now();
-    const duration = 2500;
-    let animationFrameId: number;
-    
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      setBeamProgress(progress);
+    const startForwardAnimation = () => {
+      const startTime = Date.now();
+      setIsReversing(false);
       
-      if (progress < 1) {
-        animationFrameId = requestAnimationFrame(animate);
-      } else {
-        setHasAnimated(true);
-      }
+      const animateForward = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / forwardDuration, 1);
+        setBeamProgress(progress);
+        
+        if (progress < 1) {
+          animationFrameId = requestAnimationFrame(animateForward);
+        } else {
+          // Pause, then reverse
+          timeoutId = setTimeout(startReverseAnimation, pauseDuration);
+        }
+      };
+      
+      timeoutId = setTimeout(() => {
+        animationFrameId = requestAnimationFrame(animateForward);
+      }, 200);
     };
     
-    const timer = setTimeout(() => {
-      animationFrameId = requestAnimationFrame(animate);
-    }, 200);
+    const startReverseAnimation = () => {
+      const startTime = Date.now();
+      setIsReversing(true);
+      
+      const animateReverse = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.max(1 - (elapsed / reverseDuration), 0);
+        setBeamProgress(progress);
+        
+        if (progress > 0) {
+          animationFrameId = requestAnimationFrame(animateReverse);
+        } else {
+          // Pause, then start forward again
+          timeoutId = setTimeout(startForwardAnimation, pauseDuration);
+        }
+      };
+      
+      animationFrameId = requestAnimationFrame(animateReverse);
+    };
+    
+    // Start the animation
+    startForwardAnimation();
     
     return () => {
-      clearTimeout(timer);
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [hasAnimated]);
+  }, []);
 
   const codeLines = [
     "const projects = [",
@@ -83,9 +110,20 @@ const LaserBeamTransition = () => {
   ];
 
   const beamPosition = beamProgress * 100;
-  const codeOpacity = Math.max(0, 1 - beamProgress * 1.5);
-  const cardsOpacity = Math.max(0, (beamProgress - 0.6) * 2.5);
-  const cardsScale = 0.85 + (Math.max(0, beamProgress - 0.6) * 0.375);
+  
+  // Code visible when beam hasn't passed (forward) or when reversing back
+  const codeOpacity = isReversing 
+    ? Math.min(1, beamProgress * 2)
+    : Math.max(0, 1 - beamProgress * 1.5);
+  
+  // Cards visible when beam has passed (forward) and hidden when reversing
+  const cardsOpacity = isReversing
+    ? Math.max(0, 1 - (1 - beamProgress) * 2)
+    : Math.max(0, (beamProgress - 0.6) * 2.5);
+  
+  const cardsScale = isReversing
+    ? Math.max(0.85, beamProgress + 0.15)
+    : 0.85 + (Math.max(0, beamProgress - 0.6) * 0.375);
 
   return (
     <div className="relative w-full h-[500px] flex items-center justify-center overflow-hidden rounded-xl backdrop-blur-xl bg-gradient-to-br from-background/40 via-background/60 to-background/40 border border-white/10 shadow-2xl">
