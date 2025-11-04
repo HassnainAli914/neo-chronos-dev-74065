@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import ProjectCard from "@/components/ProjectCard";
 import SectionDivider from "@/components/SectionDivider";
+import LaserBeamTransition from "@/components/LaserBeamTransition";
 import { Button } from "@/components/ui/button";
 
 const Projects = () => {
@@ -109,6 +110,7 @@ const Projects = () => {
           subtitle="Portfolio"
           title="My Latest Projects"
           description="Explore a collection of my recent work showcasing full-stack development expertise and creative solutions."
+          rightContent={<LaserBeamTransition />}
         >
           <Button
             asChild
