@@ -151,8 +151,8 @@ const LaserBeamTransition = () => {
             const cardXPosition = (basePosition * 200) - 50;
             
             // Determine if card has passed through the beam (50% position)
-            // Cards move right to left, so when position < 50%, they've passed the beam
-            const hasPassedBeam = cardXPosition < 50;
+            // Cards move left to right: left side (<50) shows code, right side (>50) shows project
+            const hasPassedBeam = cardXPosition > 50;
             
             return (
               <div
