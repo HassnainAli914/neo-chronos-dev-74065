@@ -192,14 +192,8 @@ const LaserBeamTransition = () => {
                 className="group cursor-pointer relative flex-1"
               >
                 {/* Code Card */}
-                <motion.div
-                  animate={{
-                    opacity: beamHasCrossed ? 0 : 1,
-                    scale: beamHasCrossed ? 0.9 : 1,
-                    rotateY: beamHasCrossed ? 20 : 0,
-                  }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className={`absolute inset-0 rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${codeCards[i].gradient} bg-opacity-90 border border-white/30 min-w-[200px] h-[160px] flex items-center justify-center overflow-hidden`}
+                <div
+                  className={`absolute inset-0 rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${codeCards[i].gradient} bg-opacity-90 border border-white/30 min-w-[200px] h-[160px] flex items-center justify-center overflow-hidden ${beamHasCrossed ? 'opacity-0' : 'opacity-100'}`}
                   style={{
                     boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)",
                   }}
@@ -207,17 +201,11 @@ const LaserBeamTransition = () => {
                   <pre className="text-white/90 text-xs font-mono leading-relaxed">
                     {codeCards[i].code}
                   </pre>
-                </motion.div>
+                </div>
 
                 {/* Project Card */}
-                <motion.div
-                  animate={{
-                    opacity: beamHasCrossed ? 1 : 0,
-                    scale: beamHasCrossed ? 1 : 0.9,
-                    rotateY: beamHasCrossed ? 0 : -20,
-                  }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className={`relative rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${card.gradient} bg-opacity-90 border border-white/30 hover:scale-105 transition-all duration-300 min-w-[200px] h-[160px] flex flex-col justify-between overflow-hidden`}
+                <div
+                  className={`relative rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${card.gradient} bg-opacity-90 border border-white/30 hover:scale-105 transition-all duration-300 min-w-[200px] h-[160px] flex flex-col justify-between overflow-hidden ${beamHasCrossed ? 'opacity-100' : 'opacity-0'}`}
                   style={{
                     boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)",
                   }}
@@ -245,7 +233,7 @@ const LaserBeamTransition = () => {
                   />
                   
                   <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-all duration-300 rounded-2xl" />
-                </motion.div>
+                </div>
               </motion.div>
             );
           })}
