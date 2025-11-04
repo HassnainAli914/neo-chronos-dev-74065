@@ -88,12 +88,16 @@ const LaserBeamTransition = () => {
   const cardsScale = 0.85 + (Math.max(0, beamProgress - 0.6) * 0.375);
 
   return (
-    <div className="relative w-full h-[500px] flex items-center justify-center overflow-hidden rounded-xl bg-black">
+    <div className="relative w-full h-[500px] flex items-center justify-center overflow-hidden rounded-xl backdrop-blur-xl bg-gradient-to-br from-background/40 via-background/60 to-background/40 border border-white/10 shadow-2xl">
+      
+      {/* Glass overlay effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
       
       {/* Code Layer - Green Matrix style */}
       <motion.div
         style={{ opacity: codeOpacity }}
-        className="absolute inset-0 font-mono text-[10px] leading-tight text-green-400/80 p-6 overflow-hidden"
+        className="absolute inset-0 font-mono text-[10px] leading-tight text-primary/70 p-6 overflow-hidden z-10"
       >
         <div className="relative z-10">
           {codeLines.map((line, i) => (
@@ -104,7 +108,7 @@ const LaserBeamTransition = () => {
               transition={{ delay: i * 0.05, duration: 0.3 }}
               className="whitespace-pre"
               style={{
-                textShadow: "0 0 10px rgba(34, 197, 94, 0.5)",
+                textShadow: "0 0 10px hsl(var(--primary) / 0.5)",
               }}
             >
               {line}
@@ -113,7 +117,7 @@ const LaserBeamTransition = () => {
         </div>
         
         {/* Subtle glow behind code */}
-        <div className="absolute inset-0 bg-green-500/5 blur-3xl" />
+        <div className="absolute inset-0 bg-primary/5 blur-3xl" />
       </motion.div>
 
       {/* Laser Beam - Vertical purple-pink gradient */}
