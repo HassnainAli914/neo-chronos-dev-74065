@@ -217,10 +217,10 @@ const LaserBeamTransition = () => {
                   transition: 'opacity 0.3s ease-out'
                 }}
               >
-                <div className="group cursor-pointer relative w-[280px]">
+                <div className="group cursor-pointer relative w-[240px]">
                   {/* Code Card */}
                   <div
-                    className={`absolute inset-0 rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${codeCards[i].gradient} bg-opacity-90 border border-white/30 h-[160px] flex items-center justify-center overflow-hidden transition-all duration-300 ${!hasPassedBeam ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                    className={`absolute inset-0 rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${codeCards[i].gradient} bg-opacity-90 border border-white/30 h-[200px] flex items-center justify-center overflow-hidden transition-all duration-300 ${!hasPassedBeam ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                     style={{
                       boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)",
                     }}
@@ -232,7 +232,7 @@ const LaserBeamTransition = () => {
 
                   {/* Project Card */}
                   <div
-                    className={`relative rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${card.gradient} bg-opacity-90 border border-white/30 hover:scale-105 transition-all duration-300 h-[160px] flex flex-col justify-between overflow-hidden shadow-lg ${hasPassedBeam ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                    className={`relative rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${card.gradient} bg-opacity-90 border border-white/30 hover:scale-105 transition-all duration-300 h-[200px] flex flex-col justify-between overflow-hidden shadow-lg ${hasPassedBeam ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                     style={{
                       boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)",
                     }}
