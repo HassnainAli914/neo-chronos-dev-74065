@@ -73,9 +73,15 @@ const LaserBeamTransition = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
 
+      {/* Before Container - Left of laser beam */}
+      <div className="absolute top-0 bottom-0 left-0 w-[50%] z-10 pointer-events-none" />
+      
+      {/* After Container - Right of laser beam */}
+      <div className="absolute top-0 bottom-0 right-0 w-[50%] z-15 pointer-events-none" />
+
       {/* Laser Beam - Fixed at center (50%) */}
       <div
-        className="absolute top-0 bottom-0 w-1 -translate-x-1/2 z-20"
+        className="absolute top-0 bottom-0 w-1 -translate-x-1/2 z-40"
         style={{ left: '50%' }}
       >
         {/* Core beam */}
@@ -141,7 +147,7 @@ const LaserBeamTransition = () => {
       </div>
 
       {/* Cards Layer - Carousel moving horizontally */}
-      <div className="absolute inset-0 flex items-center justify-center px-8 z-10">
+      <div className="absolute inset-0 flex items-center justify-center px-8 z-5">
         <div className="relative w-full max-w-5xl h-[200px] overflow-visible">
           {projectCards.map((card, i) => {
             // Calculate position for infinite loop carousel
@@ -154,10 +160,24 @@ const LaserBeamTransition = () => {
             // Cards move left to right: left side (<50) shows code, right side (>50) shows project
             const hasPassedBeam = cardXPosition > 50;
             
+            // Determine which container zone the card is in (with buffer before beam)
+            const isInAfterZone = cardXPosition >= 45;
+            
+            // Calculate dynamic z-index based on card type and position
+            const getCardZIndex = () => {
+              if (!hasPassedBeam) {
+                // Code card: higher z in Before zone, lower in After zone (slides under)
+                return isInAfterZone ? 'z-[25]' : 'z-[20]';
+              } else {
+                // Project card: low in Before zone, high in After zone (emerges on top)
+                return isInAfterZone ? 'z-[30]' : 'z-[15]';
+              }
+            };
+            
             return (
               <div
                 key={i}
-                className="absolute top-1/2 -translate-y-1/2"
+                className={`absolute top-1/2 -translate-y-1/2 ${getCardZIndex()}`}
                 style={{
                   left: `${cardXPosition}%`,
                   transition: 'none' // No CSS transitions, only position updates
