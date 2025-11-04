@@ -69,17 +69,17 @@ const VerticalServiceCards = () => {
   }, []);
 
   return (
-    <div className="hidden xl:block w-80 h-[500px] sticky top-24">
+    <div className="w-full xl:w-80 h-[400px] xl:h-[500px] xl:sticky xl:top-24">
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.3 }}
         className="h-full"
       >
-        <h3 className="text-xl font-bold gradient-text mb-4">Service Highlights</h3>
+        <h3 className="text-lg xl:text-xl font-bold gradient-text mb-3 xl:mb-4">Service Highlights</h3>
         <div 
           ref={scrollRef}
-          className="h-[450px] overflow-hidden space-y-4"
+          className="h-[350px] xl:h-[450px] overflow-hidden space-y-3 xl:space-y-4"
         >
           {[...serviceIntros, ...serviceIntros].map((intro, index) => {
             const Icon = intro.icon;
