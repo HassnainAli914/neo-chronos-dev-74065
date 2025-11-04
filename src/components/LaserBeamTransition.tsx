@@ -64,28 +64,19 @@ const LaserBeamTransition = () => {
     };
   }, []);
 
-  const codeLines = [
-    "const projects = [",
-    "  { id: 1, name: 'E-Commerce Platform',",
-    "    tech: ['React', 'Node.js', 'MongoDB'],",
-    "    status: 'deployed', features: ['cart', 'payments'] },",
-    "  { id: 2, name: 'SaaS Dashboard',",
-    "    tech: ['Next.js', 'PostgreSQL', 'TypeScript'],",
-    "    status: 'active', users: 2500 },",
-    "  { id: 3, name: 'Social Media App',",
-    "    tech: ['React', 'Socket.io', 'Redis'],",
-    "    features: ['chat', 'notifications', 'sharing'] },",
-    "  { id: 4, name: 'Task Manager',",
-    "    tech: ['React', 'Express', 'MongoDB'],",
-    "    boards: 'kanban', collab: true },",
-    "];",
-    "",
-    "function renderProjects() {",
-    "  return projects.map(project => {",
-    "    return <ProjectCard key={project.id}",
-    "                        data={project} />;",
-    "  });",
-    "}",
+  const codeCards = [
+    {
+      code: "const webApps = [\n  'E-Commerce',\n  'Dashboard',\n  'Analytics'\n];",
+      gradient: "from-cyan-400 to-cyan-600"
+    },
+    {
+      code: "const mobile = {\n  iOS: true,\n  Android: true,\n  React: 'Native'\n};",
+      gradient: "from-cyan-500 to-cyan-700"
+    },
+    {
+      code: "const saas = [\n  'CRM',\n  'Analytics',\n  'Automation'\n];",
+      gradient: "from-cyan-300 to-cyan-600"
+    },
   ];
 
   const projectCards = [
@@ -110,20 +101,6 @@ const LaserBeamTransition = () => {
   ];
 
   const beamPosition = beamProgress * 100;
-  
-  // Code visible when beam hasn't passed (forward) or when reversing back
-  const codeOpacity = isReversing 
-    ? Math.min(1, beamProgress * 2)
-    : Math.max(0, 1 - beamProgress * 1.5);
-  
-  // Cards visible when beam has passed (forward) and hidden when reversing
-  const cardsOpacity = isReversing
-    ? Math.max(0, 1 - (1 - beamProgress) * 2)
-    : Math.max(0, (beamProgress - 0.6) * 2.5);
-  
-  const cardsScale = isReversing
-    ? Math.max(0.85, beamProgress + 0.15)
-    : 0.85 + (Math.max(0, beamProgress - 0.6) * 0.375);
 
   return (
     <div className="relative w-full h-[500px] flex items-center justify-center overflow-hidden rounded-xl backdrop-blur-xl bg-gradient-to-br from-background/40 via-background/60 to-background/40 border border-white/10 shadow-2xl">
@@ -131,32 +108,6 @@ const LaserBeamTransition = () => {
       {/* Glass overlay effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
-      
-      {/* Code Layer - Green Matrix style */}
-      <motion.div
-        style={{ opacity: codeOpacity }}
-        className="absolute inset-0 font-mono text-[10px] leading-tight text-primary/70 p-6 overflow-hidden z-10"
-      >
-        <div className="relative z-10">
-          {codeLines.map((line, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.05, duration: 0.3 }}
-              className="whitespace-pre"
-              style={{
-                textShadow: "0 0 10px hsl(var(--primary) / 0.5)",
-              }}
-            >
-              {line}
-            </motion.div>
-          ))}
-        </div>
-        
-        {/* Subtle glow behind code */}
-        <div className="absolute inset-0 bg-primary/5 blur-3xl" />
-      </motion.div>
 
       {/* Laser Beam - Vertical purple-pink gradient */}
       <motion.div
@@ -223,68 +174,77 @@ const LaserBeamTransition = () => {
         })}
       </motion.div>
 
-      {/* Project Cards Layer */}
-      <motion.div
-        style={{ 
-          opacity: cardsOpacity,
-          scale: cardsScale,
-        }}
-        className="absolute inset-0 flex items-center justify-center gap-4 px-8 z-10"
-      >
+      {/* Cards Layer - Both code and project cards */}
+      <div className="absolute inset-0 flex items-center justify-center gap-4 px-8 z-10">
         <div className="flex flex-col gap-4">
-          {projectCards.map((card, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: 60, rotateY: 15 }}
-              animate={{
-                opacity: cardsOpacity,
-                x: cardsOpacity > 0 ? 0 : 60,
-                rotateY: cardsOpacity > 0 ? 0 : 15,
-              }}
-              transition={{
-                delay: 0.1 + i * 0.1,
-                duration: 0.6,
-                ease: [0.25, 0.1, 0.25, 1]
-              }}
-              className="group cursor-pointer"
-            >
-              <div 
-                className={`relative rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${card.gradient} bg-opacity-90 border border-white/30 hover:scale-105 transition-all duration-300 min-w-[220px] h-[140px] flex flex-col justify-between overflow-hidden`}
-                style={{
-                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)",
-                }}
+          {projectCards.map((card, i) => {
+            // Calculate card position in percentage (each card is at 1/3 intervals)
+            const cardCenterX = 50; // All cards are centered horizontally
+            
+            // Determine if beam has crossed this card
+            const beamHasCrossed = isReversing 
+              ? beamProgress < 0.5 // When reversing, switch back to code when beam goes left
+              : beamProgress > 0.5; // When forward, switch to projects when beam passes center
+            
+            return (
+              <motion.div
+                key={i}
+                className="group cursor-pointer"
               >
-                {/* Card content */}
-                <div className="relative z-10">
-                  <div className="text-white mb-3 group-hover:scale-110 transition-transform">
-                    {card.icon}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-xl text-white mb-1">{card.title}</h4>
-                    <p className="text-sm text-white/80">{card.count}</p>
-                  </div>
-                </div>
-                
-                {/* Shimmer effect */}
+                {/* Code Card */}
                 <motion.div
-                  initial={{ x: "-100%" }}
-                  animate={{ x: "200%" }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatDelay: 1,
-                    ease: "linear"
+                  style={{
+                    opacity: beamHasCrossed ? 0 : 1,
+                    scale: beamHasCrossed ? 0.9 : 1,
+                    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)",
                   }}
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
-                />
-                
-                {/* Hover glow */}
-                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-all duration-300 rounded-2xl" />
-              </div>
-            </motion.div>
-          ))}
+                  transition={{ duration: 0.3 }}
+                  className={`absolute rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${codeCards[i].gradient} bg-opacity-90 border border-white/30 min-w-[220px] h-[140px] flex items-center justify-center overflow-hidden`}
+                >
+                  <pre className="text-white/90 text-xs font-mono leading-relaxed">
+                    {codeCards[i].code}
+                  </pre>
+                </motion.div>
+
+                {/* Project Card */}
+                <motion.div
+                  style={{
+                    opacity: beamHasCrossed ? 1 : 0,
+                    scale: beamHasCrossed ? 1 : 0.9,
+                    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)",
+                  }}
+                  transition={{ duration: 0.3 }}
+                  className={`relative rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${card.gradient} bg-opacity-90 border border-white/30 hover:scale-105 transition-all duration-300 min-w-[220px] h-[140px] flex flex-col justify-between overflow-hidden`}
+                >
+                  <div className="relative z-10">
+                    <div className="text-white mb-3 group-hover:scale-110 transition-transform">
+                      {card.icon}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-xl text-white mb-1">{card.title}</h4>
+                      <p className="text-sm text-white/80">{card.count}</p>
+                    </div>
+                  </div>
+                  
+                  <motion.div
+                    initial={{ x: "-100%" }}
+                    animate={{ x: "200%" }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 1,
+                      ease: "linear"
+                    }}
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
+                  />
+                  
+                  <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-all duration-300 rounded-2xl" />
+                </motion.div>
+              </motion.div>
+            );
+          })}
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
