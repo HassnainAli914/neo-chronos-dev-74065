@@ -110,12 +110,83 @@ const Services = () => {
 
         <SectionDivider />
 
-        {/* Services Grid */}
+        {/* Services Grid with Sidebar */}
         <section className="py-20 container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <ServiceCard key={service.title} {...service} index={index} />
-            ))}
+          <div className="flex gap-8">
+            {/* Main Services Grid */}
+            <div className="flex-1">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {services.map((service, index) => (
+                  <ServiceCard key={service.title} {...service} index={index} />
+                ))}
+              </div>
+            </div>
+
+            {/* Right Sidebar - Vertical Testimonials */}
+            <div className="hidden xl:block w-80 sticky top-24 h-[calc(100vh-6rem)] overflow-hidden">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="h-full"
+              >
+                <h3 className="text-xl font-bold gradient-text mb-6">Client Feedback</h3>
+                <div className="space-y-4 overflow-y-auto h-[calc(100%-3rem)] pr-2 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent">
+                  {[
+                    {
+                      name: "Sarah Johnson",
+                      role: "CEO, TechStart",
+                      content: "The full-stack development service transformed our business. Clean code and excellent communication.",
+                    },
+                    {
+                      name: "Michael Chen",
+                      role: "CTO, InnovateCo",
+                      content: "UI/UX expertise is outstanding. Our user engagement increased by 200% after the redesign.",
+                    },
+                    {
+                      name: "Emily Rodriguez",
+                      role: "Founder, StartupHub",
+                      content: "Backend development was flawless. The API handles millions of requests without issues.",
+                    },
+                    {
+                      name: "David Park",
+                      role: "PM, DevSolutions",
+                      content: "Mobile app development exceeded expectations. Both iOS and Android versions are perfect.",
+                    },
+                    {
+                      name: "Lisa Thompson",
+                      role: "Director, TechVentures",
+                      content: "Cloud deployment was seamless. The CI/CD pipeline saved us countless hours.",
+                    },
+                    {
+                      name: "James Wilson",
+                      role: "VP, DataCorp",
+                      content: "Consultation service helped us avoid costly mistakes. Architecture review was invaluable.",
+                    },
+                  ].map((testimonial, index) => (
+                    <motion.div
+                      key={testimonial.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ delay: index * 0.1 }}
+                      className="glass-card p-4 hover:scale-105 transition-transform duration-300"
+                    >
+                      <div className="flex items-start gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center text-primary font-bold">
+                          {testimonial.name.charAt(0)}
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-foreground text-sm">{testimonial.name}</h4>
+                          <p className="text-xs text-muted-foreground">{testimonial.role}</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-foreground/80 italic">"{testimonial.content}"</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
           </div>
         </section>
 
