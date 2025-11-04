@@ -1,44 +1,35 @@
 import { motion } from "framer-motion";
 import { Database, Server, Code2, Boxes, GitBranch, Braces, FileCode, Globe } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const SkillsOrbit = () => {
   const skills = [
-    { name: "MongoDB", icon: Database, color: "text-green-500", glowColor: "rgba(34, 197, 94, 0.4)", delay: 0 },
-    { name: "Express.js", icon: Server, color: "text-gray-300", glowColor: "rgba(209, 213, 219, 0.4)", delay: 0.5 },
-    { name: "React", icon: Code2, color: "text-cyan-400", glowColor: "rgba(34, 211, 238, 0.4)", delay: 1 },
-    { name: "Node.js", icon: Boxes, color: "text-green-400", glowColor: "rgba(74, 222, 128, 0.4)", delay: 1.5 },
-    { name: "Git", icon: GitBranch, color: "text-orange-400", glowColor: "rgba(251, 146, 60, 0.4)", delay: 2 },
-    { name: "JavaScript", icon: Braces, color: "text-yellow-400", glowColor: "rgba(250, 204, 21, 0.4)", delay: 2.5 },
-    { name: "TypeScript", icon: FileCode, color: "text-blue-400", glowColor: "rgba(96, 165, 250, 0.4)", delay: 3 },
-    { name: "HTML/CSS", icon: Globe, color: "text-purple-400", glowColor: "rgba(192, 132, 252, 0.4)", delay: 3.5 },
+    { name: "MongoDB", icon: Database, color: "#4DB33D" },
+    { name: "Express.js", icon: Server, color: "#68A063" },
+    { name: "React", icon: Code2, color: "#61DAFB" },
+    { name: "Node.js", icon: Boxes, color: "#68A063" },
+    { name: "Git", icon: GitBranch, color: "#F05032" },
+    { name: "JavaScript", icon: Braces, color: "#F7DF1E" },
+    { name: "TypeScript", icon: FileCode, color: "#3178C6" },
+    { name: "HTML/CSS", icon: Globe, color: "#E34F26" },
   ];
 
-  const orbitRadius = 160;
-  const angleStep = (2 * Math.PI) / skills.length;
-
   return (
-    <div className="relative w-full h-full flex items-center justify-center min-h-[550px]">
-      {/* Outer glow effect */}
+    <div className="relative w-full h-full flex items-center justify-center min-h-[500px] p-8">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 rounded-3xl" />
+      
+      {/* Animated grid background */}
       <motion.div
-        className="absolute w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none"
-        animate={{
-          scale: [1, 1.15, 1],
-          opacity: [0.2, 0.35, 0.2],
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, hsl(var(--primary) / 0.1) 1px, transparent 1px),
+            linear-gradient(to bottom, hsl(var(--primary) / 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
         }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      {/* Center glow effect */}
-      <motion.div
-        className="absolute w-40 h-40 bg-primary/30 rounded-full blur-2xl pointer-events-none"
         animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.4, 0.6, 0.4],
+          opacity: [0.1, 0.2, 0.1],
         }}
         transition={{
           duration: 4,
@@ -47,188 +38,108 @@ const SkillsOrbit = () => {
         }}
       />
 
-      {/* Center core with glassmorphism */}
+      {/* Skills grid */}
+      <div className="relative grid grid-cols-4 gap-6 max-w-md">
+        {skills.map((skill, index) => (
+          <motion.div
+            key={skill.name}
+            initial={{ opacity: 0, scale: 0, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{
+              delay: index * 0.1,
+              duration: 0.5,
+              type: "spring",
+              stiffness: 200,
+              damping: 15,
+            }}
+            whileHover={{ 
+              scale: 1.15,
+              y: -8,
+              transition: { duration: 0.2 }
+            }}
+            className="group relative"
+          >
+            {/* Glassmorphic card */}
+            <motion.div
+              className="relative bg-card/60 backdrop-blur-md border border-primary/20 rounded-2xl p-5 cursor-pointer overflow-hidden"
+              whileHover={{
+                borderColor: `${skill.color}40`,
+                boxShadow: `0 8px 32px ${skill.color}30, 0 0 0 1px ${skill.color}20`,
+              }}
+              animate={{
+                y: [0, -4, 0],
+              }}
+              transition={{
+                y: {
+                  duration: 3,
+                  repeat: Infinity,
+                  delay: index * 0.2,
+                  ease: "easeInOut",
+                },
+              }}
+            >
+              {/* Icon */}
+              <skill.icon 
+                className="w-10 h-10 transition-all duration-300"
+                style={{ color: skill.color }}
+              />
+
+              {/* Hover glow */}
+              <motion.div
+                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                style={{
+                  background: `radial-gradient(circle at center, ${skill.color}15, transparent 70%)`,
+                }}
+              />
+
+              {/* Skill name tooltip on hover */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileHover={{ opacity: 1, y: 0 }}
+                className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-card/95 backdrop-blur-sm border border-primary/30 px-3 py-1 rounded-lg text-xs font-medium text-foreground opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+              >
+                {skill.name}
+              </motion.div>
+
+              {/* Particle effect on hover */}
+              <motion.div
+                className="absolute top-1/2 left-1/2 w-1 h-1 rounded-full opacity-0 group-hover:opacity-100"
+                style={{ backgroundColor: skill.color }}
+                animate={{
+                  scale: [0, 20, 0],
+                  opacity: [0, 0.3, 0],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                }}
+              />
+            </motion.div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Central text */}
       <motion.div
-        className="absolute w-24 h-24 glass-card rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,255,255,0.3)]"
-        animate={{
-          rotate: 360,
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "linear",
-        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center"
       >
-        <motion.div 
-          className="w-16 h-16 bg-gradient-to-br from-primary via-accent to-primary rounded-full"
+        <p className="text-sm font-medium text-muted-foreground">
+          MERN Stack Developer
+        </p>
+        <motion.div
+          className="h-0.5 w-16 mx-auto mt-2 bg-gradient-to-r from-transparent via-primary to-transparent"
           animate={{
-            rotate: -360,
+            opacity: [0.3, 1, 0.3],
           }}
           transition={{
-            duration: 25,
+            duration: 2,
             repeat: Infinity,
-            ease: "linear",
           }}
         />
       </motion.div>
-
-      {/* Orbiting skills */}
-      <TooltipProvider>
-        {skills.map((skill, index) => {
-          const angle = index * angleStep;
-          const x = Math.cos(angle) * orbitRadius;
-          const y = Math.sin(angle) * orbitRadius;
-
-          return (
-            <Tooltip key={skill.name}>
-              <TooltipTrigger asChild>
-                <motion.div
-                  className="absolute"
-                  style={{
-                    left: "50%",
-                    top: "50%",
-                  }}
-                  initial={{
-                    x: -28,
-                    y: -28,
-                    opacity: 0,
-                    scale: 0,
-                  }}
-                  animate={{
-                    x: x - 28,
-                    y: y - 28,
-                    opacity: 1,
-                    scale: 1,
-                    rotate: [0, 360],
-                  }}
-                  transition={{
-                    opacity: { delay: skill.delay * 0.15, duration: 0.6 },
-                    scale: { delay: skill.delay * 0.15, duration: 0.6, type: "spring" },
-                    x: { delay: skill.delay * 0.15, duration: 0.9, type: "spring" },
-                    y: { delay: skill.delay * 0.15, duration: 0.9, type: "spring" },
-                    rotate: {
-                      delay: skill.delay * 0.15 + 1,
-                      duration: 30,
-                      repeat: Infinity,
-                      ease: "linear",
-                    },
-                  }}
-                  whileHover={{
-                    scale: 1.4,
-                    rotate: 0,
-                    transition: { duration: 0.3, type: "spring", stiffness: 300 },
-                  }}
-                >
-                  <motion.div
-                    className="glass-card p-4 rounded-2xl cursor-pointer relative group shadow-lg hover:shadow-2xl transition-shadow"
-                    style={{
-                      boxShadow: `0 4px 20px ${skill.glowColor}, 0 0 0 1px rgba(255,255,255,0.1)`,
-                    }}
-                    animate={{
-                      y: [0, -12, 0],
-                    }}
-                    transition={{
-                      duration: 3.5,
-                      repeat: Infinity,
-                      delay: skill.delay * 0.2,
-                      ease: "easeInOut",
-                    }}
-                    whileHover={{
-                      y: -5,
-                      boxShadow: `0 8px 30px ${skill.glowColor}, 0 0 20px ${skill.glowColor}`,
-                    }}
-                  >
-                    <skill.icon 
-                      className={`w-14 h-14 ${skill.color} group-hover:drop-shadow-[0_0_12px_currentColor] transition-all duration-300`}
-                    />
-                    
-                    {/* Enhanced glow effect on hover */}
-                    <motion.div 
-                      className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl pointer-events-none"
-                      style={{
-                        background: skill.glowColor,
-                      }}
-                    />
-
-                    {/* Shimmer effect */}
-                    <motion.div
-                      className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-30"
-                      style={{
-                        background: `linear-gradient(45deg, transparent 30%, ${skill.glowColor} 50%, transparent 70%)`,
-                      }}
-                      animate={{
-                        x: ['-100%', '100%'],
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        repeatDelay: 3,
-                      }}
-                    />
-                  </motion.div>
-                </motion.div>
-              </TooltipTrigger>
-              <TooltipContent 
-                side="top"
-                className="bg-card/90 backdrop-blur-xl border-primary/30 text-foreground font-semibold px-4 py-2"
-              >
-                <p>{skill.name}</p>
-              </TooltipContent>
-            </Tooltip>
-          );
-        })}
-      </TooltipProvider>
-
-      {/* Orbit ring - outer */}
-      <motion.div
-        className="absolute rounded-full border border-primary/15"
-        style={{
-          width: orbitRadius * 2 + 40,
-          height: orbitRadius * 2 + 40,
-        }}
-        animate={{
-          rotate: -360,
-        }}
-        transition={{
-          duration: 50,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      />
-
-      {/* Orbit ring - inner */}
-      <motion.div
-        className="absolute rounded-full border-2 border-primary/25 shadow-[0_0_20px_rgba(0,255,255,0.2)]"
-        style={{
-          width: orbitRadius * 2,
-          height: orbitRadius * 2,
-        }}
-        animate={{
-          rotate: 360,
-        }}
-        transition={{
-          duration: 40,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      />
-
-      {/* Dotted orbit ring */}
-      <motion.div
-        className="absolute rounded-full border border-dashed border-primary/10"
-        style={{
-          width: orbitRadius * 2 - 40,
-          height: orbitRadius * 2 - 40,
-        }}
-        animate={{
-          rotate: -360,
-        }}
-        transition={{
-          duration: 35,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      />
     </div>
   );
 };
