@@ -67,7 +67,7 @@ const LaserBeamTransition = () => {
   ];
 
   return (
-    <div className="relative w-full h-[500px] flex items-center justify-center overflow-hidden rounded-xl backdrop-blur-xl bg-gradient-to-br from-background/40 via-background/60 to-background/40 border border-white/10 shadow-2xl">
+    <div className="relative w-full h-[350px] flex items-center justify-center overflow-hidden rounded-xl backdrop-blur-xl bg-gradient-to-br from-background/40 via-background/60 to-background/40 border border-white/10 shadow-2xl">
       
       {/* Glass overlay effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5" />
