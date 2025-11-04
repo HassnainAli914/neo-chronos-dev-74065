@@ -61,7 +61,7 @@ const TypingAnimation = () => {
   ];
 
   return (
-    <div className="w-full xl:w-96 h-[400px] xl:h-[500px] flex items-center justify-center px-4 xl:px-0">
+    <div className="w-full xl:w-96 h-[320px] xl:h-[400px] flex items-center justify-center px-4 xl:px-0">
       <div className="relative w-full max-w-md">
         {/* Floating elements */}
         {floatingElements.map((element, index) => {
