@@ -178,28 +178,32 @@ const LaserBeamTransition = () => {
       <div className="absolute inset-0 flex items-center justify-center gap-4 px-8 z-10">
         <div className="flex flex-col gap-4">
           {projectCards.map((card, i) => {
-            // Calculate card position in percentage (each card is at 1/3 intervals)
-            const cardCenterX = 50; // All cards are centered horizontally
+            // Each card converts when beam crosses 50% (center)
+            // Add small delay based on card index for staggered effect
+            const cardThreshold = 0.5 + (i * 0.05);
             
-            // Determine if beam has crossed this card
+            // Determine if beam has crossed this specific card
             const beamHasCrossed = isReversing 
-              ? beamProgress < 0.5 // When reversing, switch back to code when beam goes left
-              : beamProgress > 0.5; // When forward, switch to projects when beam passes center
+              ? beamProgress < cardThreshold // When reversing, switch back to code
+              : beamProgress > cardThreshold; // When forward, switch to projects
             
             return (
               <motion.div
                 key={i}
-                className="group cursor-pointer"
+                className="group cursor-pointer relative"
               >
                 {/* Code Card */}
                 <motion.div
-                  style={{
+                  animate={{
                     opacity: beamHasCrossed ? 0 : 1,
-                    scale: beamHasCrossed ? 0.9 : 1,
+                    scale: beamHasCrossed ? 0.95 : 1,
+                    rotateY: beamHasCrossed ? 15 : 0,
+                  }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className={`absolute rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${codeCards[i].gradient} bg-opacity-90 border border-white/30 min-w-[220px] h-[140px] flex items-center justify-center overflow-hidden`}
+                  style={{
                     boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)",
                   }}
-                  transition={{ duration: 0.3 }}
-                  className={`absolute rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${codeCards[i].gradient} bg-opacity-90 border border-white/30 min-w-[220px] h-[140px] flex items-center justify-center overflow-hidden`}
                 >
                   <pre className="text-white/90 text-xs font-mono leading-relaxed">
                     {codeCards[i].code}
@@ -208,13 +212,16 @@ const LaserBeamTransition = () => {
 
                 {/* Project Card */}
                 <motion.div
-                  style={{
+                  animate={{
                     opacity: beamHasCrossed ? 1 : 0,
-                    scale: beamHasCrossed ? 1 : 0.9,
+                    scale: beamHasCrossed ? 1 : 0.95,
+                    rotateY: beamHasCrossed ? 0 : -15,
+                  }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className={`relative rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${card.gradient} bg-opacity-90 border border-white/30 hover:scale-105 transition-all duration-300 min-w-[220px] h-[140px] flex flex-col justify-between overflow-hidden`}
+                  style={{
                     boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)",
                   }}
-                  transition={{ duration: 0.3 }}
-                  className={`relative rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${card.gradient} bg-opacity-90 border border-white/30 hover:scale-105 transition-all duration-300 min-w-[220px] h-[140px] flex flex-col justify-between overflow-hidden`}
                 >
                   <div className="relative z-10">
                     <div className="text-white mb-3 group-hover:scale-110 transition-transform">
