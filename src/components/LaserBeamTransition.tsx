@@ -93,19 +93,19 @@ const LaserBeamTransition = () => {
       icon: <Layers className="w-10 h-10" />, 
       title: "Web Apps",
       count: "12 Projects",
-      gradient: "from-cyan-500 to-blue-600"
+      gradient: "from-cyan-400 to-cyan-600"
     },
     { 
       icon: <Smartphone className="w-10 h-10" />, 
       title: "Mobile",
       count: "8 Projects",
-      gradient: "from-purple-500 to-pink-600"
+      gradient: "from-cyan-500 to-cyan-700"
     },
     { 
       icon: <Globe className="w-10 h-10" />, 
       title: "SaaS",
       count: "6 Projects",
-      gradient: "from-green-500 to-emerald-600"
+      gradient: "from-cyan-300 to-cyan-600"
     },
   ];
 
@@ -165,26 +165,26 @@ const LaserBeamTransition = () => {
       >
         {/* Core beam */}
         <div 
-          className="absolute inset-0 bg-gradient-to-b from-purple-400 via-pink-500 to-transparent"
+          className="absolute inset-0 bg-gradient-to-b from-cyan-300 via-cyan-400 to-transparent"
           style={{
-            boxShadow: "0 0 20px 4px rgba(236, 72, 153, 0.8), 0 0 40px 8px rgba(168, 85, 247, 0.6)",
+            boxShadow: "0 0 20px 4px rgba(6, 182, 212, 0.8), 0 0 40px 8px rgba(34, 211, 238, 0.6)",
           }}
         />
         
         {/* Inner bright core */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-pink-300 to-transparent w-[2px] blur-[1px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-cyan-200 to-transparent w-[2px] blur-[1px]" />
         
         {/* Outer glow layers */}
         <div 
-          className="absolute inset-0 bg-gradient-to-b from-purple-500 via-pink-500 to-transparent blur-md opacity-80"
+          className="absolute inset-0 bg-gradient-to-b from-cyan-400 via-cyan-500 to-transparent blur-md opacity-80"
           style={{ width: "8px", left: "-3px" }}
         />
         <div 
-          className="absolute inset-0 bg-gradient-to-b from-purple-500 via-pink-500 to-transparent blur-xl opacity-60"
+          className="absolute inset-0 bg-gradient-to-b from-cyan-400 via-cyan-500 to-transparent blur-xl opacity-60"
           style={{ width: "20px", left: "-9px" }}
         />
         <div 
-          className="absolute inset-0 bg-gradient-to-b from-purple-500 via-pink-500 to-transparent blur-2xl opacity-40"
+          className="absolute inset-0 bg-gradient-to-b from-cyan-400 via-cyan-500 to-transparent blur-2xl opacity-40"
           style={{ width: "40px", left: "-19px" }}
         />
 
@@ -215,10 +215,8 @@ const LaserBeamTransition = () => {
                 left: "50%",
                 width: `${Math.random() * 3 + 1}px`,
                 height: `${Math.random() * 3 + 1}px`,
-                background: i % 2 === 0 
-                  ? "rgba(236, 72, 153, 0.9)" 
-                  : "rgba(168, 85, 247, 0.9)",
-                boxShadow: `0 0 ${Math.random() * 8 + 4}px ${i % 2 === 0 ? "rgba(236, 72, 153, 1)" : "rgba(168, 85, 247, 1)"}`,
+                background: "rgba(6, 182, 212, 0.9)",
+                boxShadow: `0 0 ${Math.random() * 8 + 4}px rgba(6, 182, 212, 1)`,
               }}
             />
           );
@@ -253,7 +251,7 @@ const LaserBeamTransition = () => {
               <div 
                 className={`relative rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${card.gradient} bg-opacity-90 border border-white/30 hover:scale-105 transition-all duration-300 min-w-[220px] h-[140px] flex flex-col justify-between overflow-hidden`}
                 style={{
-                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(236, 72, 153, 0.3)",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)",
                 }}
               >
                 {/* Card content */}
