@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import SectionDivider from "@/components/SectionDivider";
+import TypingAnimation from "@/components/TypingAnimation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -87,6 +88,7 @@ const Blog = () => {
           subtitle="Blog"
           title="Thoughts on Web Development"
           description="Articles, tutorials, and insights about MERN stack development and modern web technologies."
+          rightContent={<TypingAnimation />}
         >
           <Button
             asChild
