@@ -6,7 +6,7 @@ const LaserBeamTransition = () => {
   const [carouselProgress, setCarouselProgress] = useState(0);
 
   useEffect(() => {
-    const duration = 6000; // 6 seconds for one complete loop
+    const duration = 12000; // 12 seconds for one complete loop (slower speed)
     let animationFrameId: number | undefined;
     
     const startAnimation = () => {
