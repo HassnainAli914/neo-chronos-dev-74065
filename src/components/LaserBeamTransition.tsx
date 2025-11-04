@@ -73,11 +73,25 @@ const LaserBeamTransition = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
 
-      {/* Before Container - Left of laser beam */}
-      <div className="absolute top-0 bottom-0 left-0 w-[50%] z-10 pointer-events-none" />
+      {/* Before Container - Left of laser beam (Code Cards Zone) */}
+      <div className="absolute top-0 bottom-0 left-0 w-[50%] z-10 pointer-events-none bg-gradient-to-r from-cyan-500/5 via-cyan-400/10 to-transparent overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-transparent" />
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute top-1/2 -translate-y-1/2 left-8 text-cyan-400/20 font-bold text-sm">
+            CODE ZONE
+          </div>
+        </div>
+      </div>
       
-      {/* After Container - Right of laser beam */}
-      <div className="absolute top-0 bottom-0 right-0 w-[50%] z-15 pointer-events-none" />
+      {/* After Container - Right of laser beam (Project Cards Zone) */}
+      <div className="absolute top-0 bottom-0 right-0 w-[50%] z-20 pointer-events-none bg-gradient-to-l from-primary/10 via-primary/5 to-transparent overflow-hidden backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-bl from-primary/10 to-transparent" />
+        <div className="absolute top-0 right-0 w-full h-full">
+          <div className="absolute top-1/2 -translate-y-1/2 right-8 text-primary/30 font-bold text-sm">
+            PROJECT ZONE
+          </div>
+        </div>
+      </div>
 
       {/* Laser Beam - Fixed at center (50%) */}
       <div
@@ -166,27 +180,47 @@ const LaserBeamTransition = () => {
             // Calculate dynamic z-index based on card type and position
             const getCardZIndex = () => {
               if (!hasPassedBeam) {
-                // Code card: higher z in Before zone, lower in After zone (slides under)
-                return isInAfterZone ? 'z-[25]' : 'z-[20]';
+                // Code card: higher z in Before zone (z-25), lower when entering After zone (z-12) to slide under
+                return isInAfterZone ? 'z-[12]' : 'z-[25]';
               } else {
-                // Project card: low in Before zone, high in After zone (emerges on top)
-                return isInAfterZone ? 'z-[30]' : 'z-[15]';
+                // Project card: very low in Before zone (z-5), very high in After zone (z-[35]) to appear on top
+                return isInAfterZone ? 'z-[35]' : 'z-[5]';
               }
             };
             
+            // Calculate opacity for smooth transitions
+            const getCardOpacity = () => {
+              if (!hasPassedBeam) {
+                // Code card fades as it approaches and enters the beam
+                if (cardXPosition > 45 && cardXPosition < 52) {
+                  return Math.max(0, (52 - cardXPosition) / 7);
+                }
+                return cardXPosition < 52 ? 1 : 0;
+              } else {
+                // Project card fades in as it emerges from beam
+                if (cardXPosition > 48 && cardXPosition < 55) {
+                  return Math.min(1, (cardXPosition - 48) / 7);
+                }
+                return cardXPosition > 48 ? 1 : 0;
+              }
+            };
+            
+            const cardOpacity = getCardOpacity();
+
             return (
               <div
                 key={i}
-                className={`absolute top-1/2 -translate-y-1/2 ${getCardZIndex()}`}
+                className={`absolute top-1/2 -translate-y-1/2 ${getCardZIndex()} transition-opacity duration-300`}
                 style={{
                   left: `${cardXPosition}%`,
-                  transition: 'none' // No CSS transitions, only position updates
+                  opacity: cardOpacity,
+                  transition: 'opacity 0.3s ease-out'
                 }}
               >
                 <div className="group cursor-pointer relative w-[280px]">
                   {/* Code Card */}
                   <div
-                    className={`absolute inset-0 rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${codeCards[i].gradient} bg-opacity-90 border border-white/30 h-[160px] flex items-center justify-center overflow-hidden ${hasPassedBeam ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                    className={`absolute inset-0 rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${codeCards[i].gradient} bg-opacity-90 border border-white/30 h-[160px] flex items-center justify-center overflow-hidden transition-all duration-300 ${!hasPassedBeam ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                     style={{
                       boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)",
                     }}
@@ -198,7 +232,7 @@ const LaserBeamTransition = () => {
 
                   {/* Project Card */}
                   <div
-                    className={`relative rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${card.gradient} bg-opacity-90 border border-white/30 hover:scale-105 transition-all duration-300 h-[160px] flex flex-col justify-between overflow-hidden ${hasPassedBeam ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                    className={`relative rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br ${card.gradient} bg-opacity-90 border border-white/30 hover:scale-105 transition-all duration-300 h-[160px] flex flex-col justify-between overflow-hidden shadow-lg ${hasPassedBeam ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                     style={{
                       boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)",
                     }}
