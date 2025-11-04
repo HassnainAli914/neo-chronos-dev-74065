@@ -4,10 +4,14 @@ import { Layers, Smartphone, Globe } from "lucide-react";
 
 const LaserBeamTransition = () => {
   const [beamProgress, setBeamProgress] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
+    if (hasAnimated) return;
+    
     const startTime = Date.now();
     const duration = 2500;
+    let animationFrameId: number;
     
     const animate = () => {
       const elapsed = Date.now() - startTime;
@@ -15,16 +19,23 @@ const LaserBeamTransition = () => {
       setBeamProgress(progress);
       
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        setHasAnimated(true);
       }
     };
     
     const timer = setTimeout(() => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     }, 200);
     
-    return () => clearTimeout(timer);
-  }, []);
+    return () => {
+      clearTimeout(timer);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [hasAnimated]);
 
   const codeLines = [
     "const projects = [",
