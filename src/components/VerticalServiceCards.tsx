@@ -69,7 +69,7 @@ const VerticalServiceCards = () => {
   }, []);
 
   return (
-    <div className="w-full xl:w-80 h-[400px] xl:h-[500px] xl:sticky xl:top-24">
+    <div className="w-full xl:w-80 h-[400px] xl:h-[500px] xl:sticky xl:top-24 px-4 xl:px-0">
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
