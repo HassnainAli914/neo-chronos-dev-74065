@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 220 20% 10%;
+    --foreground: 180 100% 95%;
+
+    --card: 220 25% 12%;
+    --card-foreground: 180 100% 95%;
+
+    --popover: 220 25% 12%;
+    --popover-foreground: 180 100% 95%;
+
+    --primary: 180 100% 50%;
+    --primary-foreground: 220 20% 10%;
+
+    --secondary: 180 80% 45%;
+    --secondary-foreground: 220 20% 10%;
+
+    --muted: 220 15% 25%;
+    --muted-foreground: 180 20% 70%;
+
+    --accent: 180 100% 50%;
+    --accent-foreground: 220 20% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 180 50% 30%;
+    --input: 220 25% 15%;
+    --ring: 180 100% 50%;
+
+    --radius: 1rem;
+
+    --glass-bg: 220 25% 12% / 0.4;
+    --neon-cyan: 180 100% 50%;
+    --cyber-dark: 220 20% 8%;
+    
+    --gradient-primary: linear-gradient(135deg, hsl(180 100% 50%), hsl(180 80% 60%));
+    --gradient-glow: radial-gradient(circle at 50% 0%, hsl(180 100% 50% / 0.2), transparent 50%);
+    --shadow-neon: 0 0 20px hsl(180 100% 50% / 0.5), 0 0 40px hsl(180 100% 50% / 0.3);
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-card/40 backdrop-blur-xl border border-primary/30 rounded-2xl;
+  }
+  
+  .neon-border {
+    @apply border-2 border-primary shadow-[0_0_20px_rgba(0,255,255,0.3)];
+  }
+  
+  .neon-text {
+    @apply text-primary drop-shadow-[0_0_10px_rgba(0,255,255,0.7)];
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+  
+  .cyber-grid {
+    background-image: 
+      linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
