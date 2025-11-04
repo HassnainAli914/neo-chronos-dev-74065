@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Code2, Folder, FileCode } from "lucide-react";
+import { Layers, Smartphone, Globe } from "lucide-react";
 
 const LaserBeamTransition = () => {
   const [animationPhase, setAnimationPhase] = useState<"code" | "beam" | "cards">("code");
 
   useEffect(() => {
-    const timer1 = setTimeout(() => setAnimationPhase("beam"), 500);
-    const timer2 = setTimeout(() => setAnimationPhase("cards"), 2000);
+    const timer1 = setTimeout(() => setAnimationPhase("beam"), 800);
+    const timer2 = setTimeout(() => setAnimationPhase("cards"), 2500);
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
@@ -15,129 +15,210 @@ const LaserBeamTransition = () => {
   }, []);
 
   const codeSnippets = [
-    "const project = {",
-    "  name: 'Awesome App',",
-    "  tech: ['React', 'Node'],",
-    "  status: 'deployed'",
-    "};",
+    "const projects = [",
+    "  { name: 'E-Commerce', ",
+    "    stack: 'MERN' },",
+    "  { name: 'SaaS Dashboard',",
+    "    tech: 'Next.js' },",
+    "  { name: 'Social App',",
+    "    db: 'MongoDB' }",
+    "];",
   ];
 
-  const projectCards = [
-    { icon: <Code2 className="w-8 h-8" />, label: "Web Apps" },
-    { icon: <Folder className="w-8 h-8" />, label: "SaaS" },
-    { icon: <FileCode className="w-8 h-8" />, label: "E-Commerce" },
+  const projectMockups = [
+    { icon: <Layers className="w-12 h-12" />, title: "Web Apps", gradient: "from-cyan-400 to-blue-500" },
+    { icon: <Smartphone className="w-12 h-12" />, title: "Mobile", gradient: "from-purple-400 to-pink-500" },
+    { icon: <Globe className="w-12 h-12" />, title: "SaaS", gradient: "from-green-400 to-emerald-500" },
   ];
 
   return (
-    <div className="relative w-full h-[400px] flex items-center justify-center overflow-hidden">
-      {/* Code Layer - Left Side */}
+    <div className="relative w-full h-[500px] flex items-center justify-center overflow-hidden rounded-lg">
+      {/* Background code text - full screen */}
       <motion.div
-        initial={{ opacity: 1 }}
+        initial={{ opacity: 0.6 }}
         animate={{ 
-          opacity: animationPhase === "code" ? 1 : 0,
-          x: animationPhase === "cards" ? -50 : 0
+          opacity: animationPhase === "code" ? 0.6 : animationPhase === "beam" ? 0.3 : 0,
         }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 font-mono text-sm text-primary/80 space-y-2"
+        transition={{ duration: 0.5 }}
+        className="absolute inset-0 font-mono text-xs text-muted-foreground/40 leading-relaxed overflow-hidden"
       >
-        {codeSnippets.map((line, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.1, duration: 0.4 }}
-            className="whitespace-pre"
-          >
-            {line}
-          </motion.div>
-        ))}
+        <div className="p-8 space-y-1">
+          {codeSnippets.map((line, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.08, duration: 0.4 }}
+            >
+              {line}
+            </motion.div>
+          ))}
+        </div>
       </motion.div>
 
-      {/* Laser Beam Effect */}
+      {/* Laser Beam with Enhanced Effects */}
       <motion.div
-        initial={{ x: "-100%", opacity: 0 }}
+        initial={{ x: "-120%", opacity: 0 }}
         animate={{
-          x: animationPhase === "beam" || animationPhase === "cards" ? "100%" : "-100%",
+          x: animationPhase === "beam" || animationPhase === "cards" ? "120%" : "-120%",
           opacity: animationPhase === "beam" ? 1 : 0,
         }}
         transition={{ 
-          duration: 1.5, 
-          ease: "easeInOut",
-          opacity: { duration: 0.3 }
+          duration: 1.8, 
+          ease: [0.22, 1, 0.36, 1],
+          opacity: { duration: 0.4 }
         }}
-        className="absolute inset-y-0 w-1 z-20"
+        className="absolute inset-y-0 w-2 z-30"
+        style={{
+          filter: "blur(0px)",
+        }}
       >
-        {/* Main Beam */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary to-transparent opacity-90" />
+        {/* Core beam - bright purple/cyan gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-purple-400 via-cyan-400 to-purple-500 opacity-100" 
+             style={{
+               boxShadow: "0 0 40px 10px rgba(168, 85, 247, 0.8), 0 0 80px 20px rgba(6, 182, 212, 0.6)"
+             }}
+        />
         
-        {/* Glow Effect */}
-        <div className="absolute inset-0 bg-primary blur-xl opacity-60" />
-        <div className="absolute inset-0 bg-primary blur-2xl opacity-40" />
+        {/* Inner glow */}
+        <div className="absolute inset-0 bg-white/40 blur-sm" />
         
-        {/* Glass Effect */}
-        <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
+        {/* Outer glow layers */}
+        <div className="absolute inset-0 bg-purple-400 blur-xl opacity-70" 
+             style={{ transform: "scaleX(3)" }} 
+        />
+        <div className="absolute inset-0 bg-cyan-400 blur-2xl opacity-50" 
+             style={{ transform: "scaleX(5)" }} 
+        />
+        <div className="absolute inset-0 bg-purple-500 blur-3xl opacity-40" 
+             style={{ transform: "scaleX(7)" }} 
+        />
         
-        {/* Particles */}
-        {[...Array(8)].map((_, i) => (
+        {/* Particles around the beam */}
+        {[...Array(30)].map((_, i) => {
+          const isLeft = i % 2 === 0;
+          const yPos = (i * 3.5) % 100;
+          const delay = i * 0.04;
+          const xOffset = Math.random() * 40 + 20;
+          
+          return (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={animationPhase === "beam" ? { 
+                opacity: [0, 1, 1, 0],
+                scale: [0, 1, 1.2, 0],
+                x: isLeft ? [-xOffset, -xOffset - 30] : [xOffset, xOffset + 30],
+                y: [0, Math.random() * 40 - 20],
+              } : {}}
+              transition={{
+                duration: 1.2,
+                delay: delay,
+                ease: "easeOut"
+              }}
+              className="absolute rounded-full"
+              style={{
+                top: `${yPos}%`,
+                left: isLeft ? -10 : 10,
+                width: `${Math.random() * 4 + 2}px`,
+                height: `${Math.random() * 4 + 2}px`,
+                background: i % 3 === 0 
+                  ? "rgba(168, 85, 247, 0.8)" 
+                  : i % 3 === 1 
+                  ? "rgba(6, 182, 212, 0.8)"
+                  : "rgba(255, 255, 255, 0.9)",
+                boxShadow: `0 0 ${Math.random() * 10 + 5}px ${i % 2 === 0 ? "rgba(168, 85, 247, 0.9)" : "rgba(6, 182, 212, 0.9)"}`,
+              }}
+            />
+          );
+        })}
+
+        {/* Light streaks */}
+        {[...Array(5)].map((_, i) => (
           <motion.div
-            key={i}
-            initial={{ opacity: 0 }}
-            animate={{ 
-              opacity: [0, 1, 0],
-              y: [-20, 20],
-              x: [-10, 10],
-            }}
+            key={`streak-${i}`}
+            initial={{ opacity: 0, scaleY: 0 }}
+            animate={animationPhase === "beam" ? {
+              opacity: [0, 0.6, 0],
+              scaleY: [0, 1, 0],
+            } : {}}
             transition={{
-              duration: 1,
+              duration: 0.8,
               delay: i * 0.15,
-              repeat: 1,
-              ease: "easeOut"
+              ease: "easeInOut"
             }}
-            className="absolute w-1 h-1 bg-primary rounded-full blur-sm"
+            className="absolute w-[2px] bg-gradient-to-b from-transparent via-white to-transparent"
             style={{
-              top: `${(i + 1) * 12}%`,
-              left: `${Math.random() * 20 - 10}px`,
+              height: "60%",
+              top: "20%",
+              left: `${(i - 2) * 3}px`,
+              opacity: 0.4,
             }}
           />
         ))}
       </motion.div>
 
-      {/* Project Cards Layer - Right Side */}
+      {/* Project Cards/Mockups - After beam passes */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.85, x: 100 }}
         animate={{
           opacity: animationPhase === "cards" ? 1 : 0,
-          scale: animationPhase === "cards" ? 1 : 0.9,
-          x: animationPhase === "cards" ? 0 : 50
+          scale: animationPhase === "cards" ? 1 : 0.85,
+          x: animationPhase === "cards" ? 0 : 100,
         }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 grid grid-cols-1 gap-4"
+        transition={{ duration: 0.9, ease: "easeOut", delay: 0.3 }}
+        className="absolute right-8 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-4"
       >
-        {projectCards.map((card, i) => (
+        {projectMockups.map((mockup, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{
-              opacity: animationPhase === "cards" ? 1 : 0,
-              x: animationPhase === "cards" ? 0 : 50
+            initial={{ opacity: 0, x: 80, rotateY: -20 }}
+            animate={animationPhase === "cards" ? {
+              opacity: 1,
+              x: 0,
+              rotateY: 0,
+            } : {}}
+            transition={{ 
+              delay: 0.5 + i * 0.15, 
+              duration: 0.6,
+              ease: "easeOut"
             }}
-            transition={{ delay: 0.4 + i * 0.15, duration: 0.5 }}
-            className="glass-card p-6 flex items-center gap-4 min-w-[200px] hover:scale-105 transition-transform"
+            className="relative group"
           >
-            <div className="text-primary">
-              {card.icon}
+            <div className={`glass-card p-6 rounded-2xl backdrop-blur-xl bg-gradient-to-br ${mockup.gradient} bg-opacity-10 border border-white/20 hover:scale-105 transition-all duration-300 min-w-[240px]`}
+                 style={{
+                   boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1), 0 0 20px rgba(168, 85, 247, 0.2)",
+                 }}
+            >
+              <div className="flex items-center gap-4">
+                <div className="text-primary group-hover:scale-110 transition-transform">
+                  {mockup.icon}
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg text-foreground">{mockup.title}</h4>
+                  <p className="text-sm text-muted-foreground">View Projects</p>
+                </div>
+              </div>
+              
+              {/* Glow effect on hover */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 1 }}
+                className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${mockup.gradient} opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300`}
+              />
             </div>
-            <span className="font-semibold text-foreground">{card.label}</span>
           </motion.div>
         ))}
       </motion.div>
 
-      {/* Ambient Glow */}
+      {/* Ambient glow background */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: animationPhase === "beam" ? 0.3 : 0 }}
-        transition={{ duration: 0.5 }}
-        className="absolute inset-0 bg-primary/10 blur-3xl z-0"
+        animate={{ 
+          opacity: animationPhase === "beam" ? 0.4 : animationPhase === "cards" ? 0.2 : 0 
+        }}
+        transition={{ duration: 0.8 }}
+        className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-cyan-500/20 to-purple-500/20 blur-3xl z-0"
       />
     </div>
   );
